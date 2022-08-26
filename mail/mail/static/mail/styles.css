@@ -1,3 +1,26 @@
 textarea {
     min-height: 400px;
 }
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid black;
+    padding: 10px;
+}
+
+.leftRow {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.rightRow {
+    display: flex;
+    align-items: center;
+}
+
+.margin-left{
+    margin-left: 20px;
+}
