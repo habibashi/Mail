@@ -36,7 +36,9 @@ function compose_email() {
   document.querySelector('#view').style.display = 'none';
 
   // Clear out composition fields
-  document.querySelector('#compose-recipients').value = '';
+  const recipients = document.querySelector('#compose-recipients')
+  recipients.value = '';
+  recipients.disabled = false
   document.querySelector('#compose-subject').value = '';
   document.querySelector('#compose-body').value = '';
 }
@@ -73,14 +75,15 @@ function load_mailbox(mailbox) {
         } else {
           sender.append(email.sender);
         }
-        const body = document.createElement('div');
-        body.append(email.body);
-        leftRow.append(sender, body);
+        const subjects = document.createElement('div');
+        subjects.append(email.subject);
+        leftRow.append(sender, subjects);
 
         rightRow.classList.add('rightRow');
         rightRow.append(email.timestamp);
 
         document.querySelector('#emails-view').append(row);
+
 
         if (email.read === false) {
           row.style.backgroundColor = 'lightgray';
@@ -112,6 +115,15 @@ function load_mailbox(mailbox) {
               const button = document.createElement('button');
               button.innerHTML = 'reply';
               button.className = 'btn btn-outline-primary';
+              button.addEventListener('click', () => {
+                document.querySelector('#emails-view').style.display = 'none';
+                document.querySelector('#compose-view').style.display = 'block';
+                document.querySelector('#view').style.display = 'none';
+                document.querySelector("#compose-recipients").value = `${email.sender}`;
+                document.querySelector("#compose-recipients").disabled = true;
+                document.querySelector("#compose-subject").value = `Re: ${email.subject}`;
+                document.querySelector("#compose-body").value = `on ${email.timestamp} ${email.recipients} wrote: (${email.body}) `;
+              })
 
 
               // if (email.read === false){
@@ -157,12 +169,22 @@ function load_mailbox(mailbox) {
               const body = document.createElement('p');
               body.innerHTML = email.body;
 
+              const container = document.createElement('div');
+              container.append(form, to, subject, timestamp, button, archived, unarchive, hr, body);
 
-              document.querySelector('#view').append(form, to, subject, timestamp, button, archived, unarchive, hr, body);
+              const viewss = document.querySelector('#view')
+              viewss.append(container);
 
-
+              document.querySelector('#inbox').addEventListener('click', () => {
+                container.remove();
+              })
+              document.querySelector('#sent').addEventListener('click', () => {
+                container.remove();
+              })
+              document.querySelector('#archived').addEventListener('click', () => {
+                container.remove();
+              })
             });
-
         })
 
 
